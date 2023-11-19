@@ -1,26 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import ProgressBar from "./ProgressBar";
 
 const TIMER = 3000;
 
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
-  const [remainingTime, setRemainingTime] = useState(TIMER);
-
   // creates infinite loop, because the state change for remainingTime triggers a re-render, and setInterval is run again, so that many setIntervals are running
   // simultaneously; each setInterval reduces remaining time every 10ms
   // setInterval(() => {
   // setRemainingTime((prevTime) => prevTime - 10);
   // }, 10);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingTime((prevTime) => prevTime - 10);
-    }, 10);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []); // no deps, so setInterval only runs once
-
   useEffect(() => {
     console.log("TIMER SET");
     const timer = setTimeout(() => {
@@ -53,7 +41,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
-      <progress value={remainingTime} max={TIMER} />
+      <ProgressBar timer={TIMER} />
     </div>
   );
 }

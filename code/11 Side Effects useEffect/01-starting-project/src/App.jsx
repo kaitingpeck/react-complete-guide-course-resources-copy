@@ -6,6 +6,7 @@ import Modal from "./components/Modal.jsx";
 import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
 import logoImg from "./assets/logo.png";
 import { sortPlacesByDistance } from "./loc.js";
+import { useCallback } from "react";
 
 // only run once in entire app lifecycle when app starts; rather than on every re-render
 const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
@@ -40,7 +41,7 @@ function App() {
       // console.log("Executing side effect");
       setAvailablePlaces(sortedPlaces);
     });
-  }, []);
+  }, []); // dependencies array is empty, so never re-runs
 
   // exposed by browser to JS code that runs in browser (not from React)
   // async code, side effect
@@ -83,7 +84,9 @@ function App() {
     }
   }
 
-  function handleRemovePlace() {
+  // prevents re-creating the function when the component function is re-executed
+  // stores the function in memory and reuses it whenever the comp function is executed
+  const handleRemovePlace = useCallback(function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) => {
       const ret = prevPickedPlaces.filter(
         (place) => place.id !== selectedPlace.current
@@ -102,7 +105,7 @@ function App() {
     // JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current))
     // JSON.stringify(pickedPlaces.map((place) => place.id))
     // );
-  }
+  }, []);
 
   return (
     <>

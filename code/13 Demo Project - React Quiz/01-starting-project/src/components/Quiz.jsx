@@ -10,19 +10,6 @@ export default function Quiz() {
   const activeQuestionIdx = userAnswers.length;
   const isQuizCompleted = activeQuestionIdx === QUESTIONS.length;
 
-  if (isQuizCompleted) {
-    return (
-      <div id="summary">
-        <img src={quizCompleteImg} alt="Trophy icon" />
-        <h2>Quiz completed!</h2>
-      </div>
-    );
-  }
-
-  const question = QUESTIONS[activeQuestionIdx];
-  const shuffledAnswers = [...question.answers]; // make a copy
-  shuffledAnswers.sort(() => Math.random() - 0.5); // doesn't return new array, edit existing array; negative return value leads to swap, else stay
-
   const handleSelectAnswer = useCallback(function handleSelectAnswer(
     selectedAnswer
   ) {
@@ -35,7 +22,18 @@ export default function Quiz() {
     [handleSelectAnswer]
   );
 
-  console.log(userAnswers);
+  if (isQuizCompleted) {
+    return (
+      <div id="summary">
+        <img src={quizCompleteImg} alt="Trophy icon" />
+        <h2>Quiz completed!</h2>
+      </div>
+    );
+  }
+
+  const question = QUESTIONS[activeQuestionIdx];
+  const shuffledAnswers = [...question.answers]; // make a copy
+  shuffledAnswers.sort(() => Math.random() - 0.5); // doesn't return new array, edit existing array; negative return value leads to swap, else stay
 
   return (
     <div id="quiz">

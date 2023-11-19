@@ -1,13 +1,10 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function QuestionTimer({ timeout, onTimeout }) {
   const [remainingTime, setRemainingTime] = useState(timeout);
 
-  console.log("Re-rendering Question timer"); // every time remainingTime changed, this is called. Because QuestionTimer never gets unmounted, the interval is never cleared so this just goes on, until interval is cleared (see below)
-
   useEffect(() => {
-    console.log("SET TIMEOUT"); // every time app re-renders (userAnswers changed due to onTimeout), this is not called again, because onTimeout is now memoized
+    console.log("SET TIMEOUT");
     const timeoutObj = setTimeout(onTimeout, timeout);
 
     return () => {
@@ -21,10 +18,7 @@ export default function QuestionTimer({ timeout, onTimeout }) {
       setRemainingTime((prevRemainingTime) => prevRemainingTime - 100);
     }, 100);
 
-    // when component unmounts (in strict mode, the re-render does result in the first render being unmounted)
-    // however the next render never gets unmounted, because we don't recreate QuestionTimer in Quiz.jsx
     return () => {
-      console.log("Clearing interval");
       clearInterval(interval);
     };
   }, []);

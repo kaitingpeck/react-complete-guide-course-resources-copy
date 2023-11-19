@@ -40,8 +40,11 @@ export default function Quiz() {
   return (
     <div id="quiz">
       <div id="question">
-        {/* not unmounted nor remounted, timers and intervals not reset even when question changes */}
-        <QuestionTimer timeout={5000} onTimeout={handleSkipAnswer} />
+        <QuestionTimer
+          key={activeQuestionIdx}
+          timeout={5000}
+          onTimeout={handleSkipAnswer}
+        />
         <h2>{question.text}</h2>
         <ul id="answers">
           {shuffledAnswers.map((a) => (

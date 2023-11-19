@@ -2,6 +2,7 @@ import { useState } from "react";
 import QUESTIONS from "../questions.js";
 import quizCompleteImg from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
+import { useCallback } from "react";
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
@@ -22,17 +23,25 @@ export default function Quiz() {
   const shuffledAnswers = [...question.answers]; // make a copy
   shuffledAnswers.sort(() => Math.random() - 0.5); // doesn't return new array, edit existing array; negative return value leads to swap, else stay
 
-  function handleSelectAnswer(selectedAnswer) {
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    selectedAnswer
+  ) {
     setUserAnswers((prevUserAnswers) => [...prevUserAnswers, selectedAnswer]);
-  }
+  },
+  []);
+
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
+
+  console.log(userAnswers);
 
   return (
     <div id="quiz">
       <div id="question">
-        <QuestionTimer
-          timeout={5000}
-          onTimeout={() => handleSelectAnswer(null)}
-        />
+        {/* not unmounted nor remounted, timers and intervals not reset even when question changes */}
+        <QuestionTimer timeout={5000} onTimeout={handleSkipAnswer} />
         <h2>{question.text}</h2>
         <ul id="answers">
           {shuffledAnswers.map((a) => (

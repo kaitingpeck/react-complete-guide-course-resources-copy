@@ -30,7 +30,11 @@ export default function Answers({
 
         return (
           <li key={a} className="answer">
-            <button onClick={() => onSelect(a)} className={cssClass}>
+            <button
+              onClick={() => onSelect(a)}
+              className={cssClass}
+              disabled={answerState !== ""} // already answered, don't want to allow selecting again yet before deciding if right or wrong
+            >
               {a}
             </button>
           </li>

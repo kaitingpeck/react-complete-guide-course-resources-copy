@@ -1,4 +1,4 @@
-import { useState, memo, useCallback } from "react";
+import { useState, memo, useCallback, useEffect } from "react";
 
 import IconButton from "../UI/IconButton.jsx";
 import MinusIcon from "../UI/Icons/MinusIcon.jsx";
@@ -30,6 +30,15 @@ export default function Counter({ initialCount }) {
     () => isPrime(initialCount),
     [initialCount]
   );
+
+  // used in a suboptimal way, and triggers an extra component execution
+  // runs after component function execution
+  // changing state here in the useEffect also triggers another component execution
+  // Note: useEffect runs on first render, and any time dependency value changes
+  // useEffect(() => {
+  //   console.log("useEffect called");
+  //   setCounter(initialCount);
+  // }, [initialCount]);
 
   const [counter, setCounter] = useState(initialCount);
 
